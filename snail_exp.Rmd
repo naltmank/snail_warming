@@ -1,0 +1,178 @@
+---
+title: "snail experiment"
+author: "Noam Altman-Kurosaki"
+date: "2024-11-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list=ls()) # clean up
+librarian::shelf(knitr, plyr, tidyr, dplyr, effects, ggplot2, ggrepel, ggpubr, emmeans, DHARMa, glmmTMB, survival, coxme, car, lattice)
+opts_chunk$set(comment="  ",
+               collapse=TRUE, 
+               echo=FALSE,
+               dev="png",
+               warning=TRUE
+               )
+```
+
+```{r ggplot themes}
+# set order, labels, and coloring for commonly used species
+coral_labels <- c(expression(italic("Pocillopora")), expression(italic("Porites")))
+coral_limits <- c("Pocillopora", "Porites")
+coral_colors <-  c("Pocillopora" = "#0072B2", "Porites" = "#D55E00")
+
+
+snail_labels <- c(expression(italic("Coralliophila")), expression(italic("Drupella")))
+snail_limits <- c("Coralliophila", "Drupella")
+snail_colors <- c("Coralliophila" = "#332288", "Drupella" = "#882255")
+
+# Theme for plots
+my_theme <-
+  theme_classic() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "bottom",
+        legend.key.size = unit(1.5, 'cm'),
+        legend.text = element_text(size=25),
+        legend.title = element_text(size=32),
+        axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(color = "grey20", size = 30, hjust = .5, vjust = .5, face = "plain"),
+        axis.title.x = element_text(color = "grey20", size = 32, hjust = .5, vjust = 0, face = "plain"),
+        axis.text.y = element_text(color = "grey20", size = 30, hjust = .5, vjust = .5, face = "plain"),
+        axis.title.y = element_text(color = "grey20", size = 32, hjust = .5, vjust = 0, face = "plain"),
+        strip.text.x = element_text(color = "grey20", size = 32, hjust = .5, vjust = 0, face = "plain")
+  )
+
+```
+
+```{r choice assay}
+choice <-read.csv(here::here("data", "snail_choice_assay.csv"))
+
+# pivot longer
+choice_long <- choice %>%
+  pivot_longer(
+    cols = c(Porites, Pocillopora, NC), # Columns representing choices
+    names_to = "Prey",                 # Name for the new column for choices
+    values_to = "Choice"               # Name for the new column for values
+  )
+
+# convert to contingency table
+contingency_table <- choice_long %>%
+  group_by(Snail, Prey) %>%
+  summarize(Count = sum(Choice, na.rm = T)) %>%
+  pivot_wider(names_from = Prey, values_from = Count, values_fill = 0)
+
+# convert to matrix for fisher's exact test
+contingency_table_m <- as.matrix(contingency_table[,-which(names(contingency_table) %in% "Snail")])
+fisher.test(contingency_table_m) # P = 5.29E-05
+```
+
+```{r plot choice assay, fig.height=15, fig.width=15}
+# prepare data for plotting
+proportions <- choice_long %>%
+  group_by(Snail, Prey) %>%
+  summarize(Count = sum(Choice, na.rm = T)) %>%
+  group_by(Snail) %>%
+  mutate(Proportion = Count / sum(Count))
+
+# Plot
+(choice_plot <-
+  ggplot(proportions, aes(x = Snail, y = Proportion, fill = Prey)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(x = 0.55, y = 1.05, label = "P < 0.0001"), hjust = 0, size = 14) +
+  scale_fill_manual(values = c("NC" = "darkgrey",
+                               "Pocillopora" = "#0072B2",
+                               "Porites" = "#D55E00"),
+                    labels = c("No Choice", coral_labels)) +
+  labs(x = "", y = "Proportion of Choices\n", fill = "Prey") +
+  my_theme)
+
+# ggsave(here::here("output", "snail_choice_plot_v1.png"), choice_plot, height = 15, width = 15)
+```
+
+```{r  respo unfed snails}
+respo <- read.csv(here::here("data", "snail_respo.csv"))
+
+unfed <- subset(respo, Trial.type == "Unfed")
+fed <- subset(respo, Trial.type == "Fed")
+
+unfed_mod <- glmmTMB(abs(Respiration) ~ Snail*Temp, data = unfed, family = Gamma(link = "log"))
+summary(unfed_mod)
+Anova(unfed_mod)
+#              Chisq Df Pr(>Chisq)    
+# Snail      18.8110  1  1.443e-05 ***
+# Temp        3.7143  1    0.05395 .  
+# Snail:Temp  0.7323  1    0.39214    
+plot(simulateResiduals(unfed_mod)) # no issues
+plot(allEffects(unfed_mod))
+emmeans(unfed_mod, pairwise ~ Temp | Snail) # despite no sig interaction, Drupella respo still increased in heated
+# $contrasts
+# Snail = Coralliophila:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated   -0.249 0.328 Inf  -0.758  0.4487
+# 
+# Snail = Drupella:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated   -0.646 0.328 Inf  -1.968  0.0491
+ 
+
+
+
+fed_mod <- glmmTMB(abs(Respiration) ~ Temp*Snail + (1|Tank), data = fed, family = Gamma(link = "log"))
+summary(fed_mod)
+plot(simulateResiduals(fed_mod)) # issues in QQ residuals
+bwplot(abs(Respiration) ~ Temp | Snail, data = fed) # driven by outliers from heated treat. I don't want to delete them
+hist(residuals(fed_mod), breaks = 20)
+plot(predict(fed_mod) ~ residuals(fed_mod)) # yeah. I think I'm fine with this
+
+# NOTE: I tested this on a subset that removed these outliers. The issues were lessened but not fully removed
+# However, the trends were identical (though temp effect was slightly lessened)
+Anova(fed_mod)
+# Response: abs(Respiration)
+#              Chisq Df Pr(>Chisq)    
+# Temp        5.2148  1     0.0224 *  
+# Snail      28.8189  1  7.947e-08 ***
+# Temp:Snail  1.4790  1     0.2239    
+plot(allEffects(fed_mod))
+emmeans(fed_mod, pairwise ~ Temp | Snail) # Coralliophila resp doesn't increase with temp but Drup does
+# $contrasts
+# Snail = Coralliophila:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated   -0.181 0.159 Inf  -1.142  0.2533
+# 
+# Snail = Drupella:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated   -0.405 0.158 Inf  -2.567  0.0103
+
+emmeans(fed_mod, pairwise ~ Snail | Temp) # Drup resp always higher than Coralliophila
+# $contrasts
+# Temp = Ambient:
+#  contrast                 estimate    SE  df z.ratio p.value
+#  Coralliophila - Drupella   -0.380 0.131 Inf  -2.915  0.0036
+# 
+# Temp = Heated:
+#  contrast                 estimate    SE  df z.ratio p.value
+#  Coralliophila - Drupella   -0.604 0.129 Inf  -4.670  <.0001
+
+
+  
+```
+
+```{r plot respiration, fig.height = 10, fig.width=12}
+# Version 1
+(respo_plot <- ggplot() +
+  geom_boxplot(data = fed, aes(x = Snail, y = abs(Respiration), colour = Temp), outlier.shape = NA) +
+  geom_point(data = fed,
+             aes(x = Snail, y = abs(Respiration), colour = Temp), position = position_jitterdodge(0.3)) +
+  scale_y_continuous(trans = "log10") +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF")) +
+  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
+  labs(y = expression(Respiration ~ (mu * mol ~ O[2] ~ g ~ h^-1)), x = "") +
+  geom_segment(aes(x = 1.8, xend = 2.2, y = 3.5, yend = 3.5)) +
+  geom_text(aes(x = 2, y = 3.7, label = "*"), size = 14) +
+  my_theme)
+
+# ggsave(here::here("output", "respiration_plot_v1.png"), respo_plot, height = 10, width = 12)
+```
