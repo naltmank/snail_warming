@@ -98,6 +98,7 @@ proportions <- choice_long %>%
                                "Porites" = "#D55E00"),
                     labels = c("No Choice", coral_labels)) +
   labs(x = "", y = "Proportion of Choices\n", fill = "Prey") +
+  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
   my_theme)
 
 # ggsave(here::here("output", "snail_choice_plot_v1.png"), choice_plot, height = 15, width = 15)
@@ -329,6 +330,35 @@ cox.zph(cox_model) # all good
 
 # Plot Schoenfeld residuals
 plot(cox.zph(cox_model)) # weakly nonlinear but not bad
+
+emmeans(cox_model, pairwise ~ Snail | Treatment)
+# $contrasts
+# Treatment = Ambient:
+#  contrast                 estimate    SE  df z.ratio p.value
+#  Control - Coralliophila     0.451 0.768 Inf   0.588  0.8265
+#  Control - Drupella         -1.828 0.625 Inf  -2.926  0.0096
+#  Coralliophila - Drupella   -2.279 0.688 Inf  -3.312  0.0027
+# 
+# Treatment = Heated:
+#  contrast                 estimate    SE  df z.ratio p.value
+#  Control - Coralliophila    -0.850 0.536 Inf  -1.586  0.2517
+#  Control - Drupella         -2.760 0.562 Inf  -4.907  <.0001
+#  Coralliophila - Drupella   -1.909 0.520 Inf  -3.673  0.0007
+
+emmeans(cox_model, pairwise ~ Treatment | Snail)
+# $contrasts
+# Snail = Control:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated   -0.452 0.908 Inf  -0.497  0.6190
+# 
+# Snail = Coralliophila:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated   -1.753 0.947 Inf  -1.852  0.0640
+# 
+# Snail = Drupella:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated   -1.383 0.817 Inf  -1.692  0.0906
+
 ```
 
 ```{r plot survival curves, fig.height = 10, fig.width=18}
@@ -376,8 +406,8 @@ surv_df <- do.call(rbind, surv_list)
   scale_fill_manual(values = snail_colors, labels = snail_labels) +
   labs(
     x = "Days Until Death",
-    y = "Survival Probability",
-    title = expression(b ~ ". " ~ italic(Pocillopora) ~ " Mortality")
+    y = "Survival Probability\n",
+    title = expression(b ~ ". " ~ italic(Pocillopora) ~ " Survival")
     ) +
   my_theme)
 
