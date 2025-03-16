@@ -92,12 +92,14 @@ proportions <- choice_long %>%
 (choice_plot <-
   ggplot(proportions, aes(x = Snail, y = Proportion, fill = Prey)) +
   geom_bar(stat = "identity") +
-  geom_text(aes(x = 0.55, y = 1.05, label = "P < 0.0001"), hjust = 0, size = 14) +
+  geom_text(aes(x = 0.55, y = 1.15, label = "Fisher's Exact Test\nn = 15\nP < 0.0001"), hjust = 0, size = 14) +
   scale_fill_manual(values = c("NC" = "darkgrey",
                                "Pocillopora" = "#0072B2",
                                "Porites" = "#D55E00"),
                     labels = c("No Choice", coral_labels)) +
   labs(x = "", y = "Proportion of Choices\n", fill = "Prey") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)),
+                     breaks = seq(0, 1, 0.25)) +  
   scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
   my_theme)
 
@@ -179,8 +181,12 @@ emmeans(fed_mod, pairwise ~ Snail | Temp) # Drup resp always higher than Coralli
   geom_point(data = fed,
              aes(x = Snail, y = abs(Respiration), colour = Temp), position = position_jitterdodge(0.3)) +
   scale_y_continuous(trans = "log10") +
-  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF")) +
-  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
+                      labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  scale_x_discrete(labels = c("Coralliophila" = expression(atop(italic("Coralliophila"), "n = 53")),
+                              "Drupella" = expression(atop(italic("Drupella"), "n = 54"))
+                              )
+                   ) +
   labs(y = expression(Respiration ~ (mu * mol ~ O[2] ~ g ~ h^-1)), x = "") +
   geom_segment(aes(x = 1.8, xend = 2.2, y = 3.5, yend = 3.5)) +
   geom_text(aes(x = 2, y = 3.7, label = "*"), size = 14) +
@@ -268,13 +274,22 @@ porites_letters <- data.frame(
   geom_boxplot(data = porites, aes(x = Snail, y = Net.change, colour = Snail), outlier.shape = NA) +
   geom_point(data = porites, aes(x = Snail, y = Net.change, colour = Snail), position = position_jitterdodge(0.3)) +
   geom_text(data = porites_letters, aes(x = Snail, y = 18, label = Letters), size = 10) +
-  facet_wrap(~Treatment) +
-  scale_colour_manual(values = snail_colors, labels = snail_labels) +
+  facet_wrap(~ Treatment,
+             labeller = as_labeller(c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)"))) +
+  scale_colour_manual(values = snail_colors,
+                      labels = c("Control" = expression(atop("Control", "     n = 15")),
+                                 "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 15")),
+                                 "Drupella" = expression(atop(italic("Drupella"), "     n = 15"))
+                                 )
+                      ) +
   scale_x_discrete(labels = c("Control" = "Control",
-                              "Coralliophila" = expression(italic(Coralliophila)),
-                              "Drupella" = expression(italic(Drupella)))) +
-  labs(y = "Net Growth (% Change)", x = "", title = expression(a ~ ". " ~ italic(Porites) ~ " growth")) +
-  my_theme)
+                              "Coralliophila" = expression(italic("Coralliophila")),
+                              "Drupella" = expression(italic("Drupella"))
+                              )
+                   ) +
+  labs(y = "Net Growth (% Change)", x = "", title = "a.") +
+  my_theme +
+  theme(legend.position = "right"))
 
 ```
 
@@ -395,39 +410,66 @@ surv_list <- lapply(1:nrow(newdata), function(i) {
 # Combine into a single dataframe
 surv_df <- do.call(rbind, surv_list)
 
+# subset final timepoint values for letters dataframe
+poc_surv_letters <- subset(surv_df, Time == 13)
+
+# add letters for connecting letters
+poc_surv_letters$Letters <- ifelse(poc_surv_letters$Snail == "Drupella", "b", "a")
+
+# add x position for plot to be right after last day
+poc_surv_letters$X <- 13.5
+
+# create df for statistic info
+survival_stats <- data.frame(
+  Treatment = c("Ambient", "Heated"),
+  Text = c("Temp: P = 0.12\nSnail: P < 0.0001\nInteraction: P = 0.36", "")
+)
+
 
 (poc_survival_plot <-
   ggplot(surv_df, aes(x = Time, y = Surv, color = Snail)) +
-  geom_step() +  # Survival curve
+  geom_step(show.legend = FALSE) +  # Survival curve
   geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = Snail, colour = NULL), alpha = 0.2) +
-  facet_wrap(~ Treatment) +
-  scale_colour_manual(values = snail_colors, labels = snail_labels) +
-  scale_fill_manual(values = snail_colors, labels = snail_labels) +
+  facet_wrap(~ Treatment,
+             labeller = as_labeller(c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)"))) +
+  scale_colour_manual(values = snail_colors,
+                      labels = c("Control" = expression(atop("Control", "     n = 12")),
+                                 "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 12")),
+                                 "Drupella" = expression(atop(italic("Drupella"), "     n = 12"))
+                                 )
+                      ) +
+  scale_fill_manual(values = snail_colors,
+                      labels = c("Control" = expression(atop("Control", "     n = 12")),
+                                 "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 12")),
+                                 "Drupella" = expression(atop(italic("Drupella"), "     n = 12"))
+                                 )
+                      ) +
   labs(
     x = "Days Until Death",
     y = "Survival Probability\n",
-    title = expression(b ~ ". " ~ italic(Pocillopora) ~ " Survival")
+    title = "b."
     ) +
-  my_theme)
+  geom_text(data = poc_surv_letters, aes(x = X, y = Surv, label = Letters), colour = "black", size = 10) +
+  my_theme +
+  theme(legend.position = "right"))
 
 ```
 
-```{r coral growth and suvival panel, fig.height = 18, fig.width=18}
-(growth_surv_panel <- ggarrange(growth_plot, poc_survival_plot, nrow = 2, ncol = 1, common.legend = T,
-                               legend.grob = get_legend(growth_plot), legend = "bottom"))
+```{r coral growth and suvival panel, fig.height = 18, fig.width=20}
+(growth_surv_panel <- ggarrange(growth_plot, poc_survival_plot, nrow = 2, ncol = 1, common.legend = F))
 
 # I ANNOTATED THIS FURTHER IN PHOTOSHOP TO ADD RELEVANT STATISTICAL INFO TO BOTH PLOTS
 
-# ggsave(here::here("output", "growth_survival_plot_v2.png"), growth_surv_panel, height = 18, width = 18)
+# ggsave(here::here("output", "growth_survival_plot_v3.png"), growth_surv_panel, height = 18, width = 20)
 
 ```
 
 ```{r tissue loss}
 # read data
-tissue <- read.csv(here::here("data", "tissue_loss_image_analysis.csv"), stringsAsFactors = T)
+tissue_long <- read.csv(here::here("data", "tissue_loss_image_analysis.csv"), stringsAsFactors = T)
 
 # condense tissue loss data so that you have total surface area and lost surface area by summming all images
-tissue <- tissue %>%
+tissue <- tissue_long %>%
   group_by(Coral.species, Snail, Treatment, Coral.ID, Colony.ID) %>%
   summarise(Surface.area = sum(Live.tissue),
             Dead.area = sum(Dead.tissue))
@@ -456,7 +498,7 @@ tissue_full$Mortality <- ifelse(is.na(tissue_full$Mortality), 1, tissue_full$Mor
 # sv_transform mortality data because of 0s and 1s
 tissue_full$Mortality_trans <- sv_trans(tissue_full$Mortality)
 
-# porites rarely experience 100% mortality - separating out corals to identify separately
+# porites rarely experience 100% mortality - separating out corals to analyze separately
 porites_tissue <- subset(tissue_full, Coral.species == "Porites")
 pocillopora_tissue <- subset(tissue_full, Coral.species == "Pocillopora")
 
@@ -468,41 +510,42 @@ porites_tissue_mod <- glmmTMB(Mortality_trans ~ Snail*Treatment + (1|Colony.ID) 
                       family = beta_family(), data = porites_tissue)
 summary(porites_tissue_mod)
 Anova(porites_tissue_mod)
+# Response: Mortality_trans
 #                   Chisq Df Pr(>Chisq)    
-# Snail           61.7237  2  3.953e-14 ***
-# Treatment       12.4640  1  0.0004149 ***
-# Snail:Treatment  1.0339  2  0.5963344   
+# Snail           66.5636  2  3.515e-15 ***
+# Treatment       12.0625  1  0.0005145 ***
+# Snail:Treatment  0.3419  2  0.8428499    
 plot(simulateResiduals(porites_tissue_mod)) # levene test for homogeneity significant - likely due to treatment effects
 emmeans(porites_tissue_mod, pairwise ~ Snail | Treatment )
 
 # $contrasts
 # Treatment = Ambient:
 #  contrast                 estimate    SE  df z.ratio p.value
-#  Control - Coralliophila    -1.753 0.413 Inf  -4.244  0.0001
-#  Control - Drupella         -2.347 0.439 Inf  -5.352  <.0001
-#  Coralliophila - Drupella   -0.594 0.445 Inf  -1.336  0.3752
+#  Control - Coralliophila    -1.788 0.408 Inf  -4.388  <.0001
+#  Control - Drupella         -2.468 0.432 Inf  -5.708  <.0001
+#  Coralliophila - Drupella   -0.680 0.438 Inf  -1.552  0.2669
 # 
 # Treatment = Heated:
 #  contrast                 estimate    SE  df z.ratio p.value
-#  Control - Coralliophila    -2.311 0.438 Inf  -5.277  <.0001
-#  Control - Drupella         -2.415 0.436 Inf  -5.533  <.0001
-#  Coralliophila - Drupella   -0.104 0.410 Inf  -0.254  0.9650
+#  Control - Coralliophila    -2.088 0.421 Inf  -4.963  <.0001
+#  Control - Drupella         -2.476 0.426 Inf  -5.810  <.0001
+#  Coralliophila - Drupella   -0.388 0.398 Inf  -0.974  0.5935
 
 
 
-emmeans(porites_tissue_mod, pairwise ~ Treatment | Snail ) # coralliophila did have bigger impact in heated treatment!!
+emmeans(porites_tissue_mod, pairwise ~ Treatment | Snail ) # tissue loss exacerbated in heated treatment!!
 # $contrasts
 # Snail = Control:
 #  contrast         estimate    SE  df z.ratio p.value
-#  Ambient - Heated   -0.724 0.400 Inf  -1.809  0.0705
+#  Ambient - Heated   -0.775 0.398 Inf  -1.949  0.0513
 # 
 # Snail = Coralliophila:
 #  contrast         estimate    SE  df z.ratio p.value
-#  Ambient - Heated   -1.281 0.452 Inf  -2.832  0.0046
+#  Ambient - Heated   -1.075 0.436 Inf  -2.465  0.0137
 # 
 # Snail = Drupella:
 #  contrast         estimate    SE  df z.ratio p.value
-#  Ambient - Heated   -0.791 0.427 Inf  -1.854  0.0637
+#  Ambient - Heated   -0.782 0.413 Inf  -1.895  0.0581
 
 porites_tissue_letters <- data.frame(
   Snail = rep( c("Control", "Coralliophila", "Drupella"), 2 ),
@@ -567,24 +610,32 @@ pocillopora_tissue_letters <- data.frame(
   geom_boxplot(data = porites_tissue, aes(x = Snail, y = Mortality, colour = Treatment), outlier.shape = NA) +
   geom_point(data = porites_tissue,
              aes(x = Snail, y = Mortality, colour = Treatment), position = position_jitterdodge(0.3)) +
-  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF")) +
-  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
-  labs(y = "Proportion Tissue Mortality\n", x = "", title = expression(a ~ ". " ~ italic(Porites) ~ " Mortality")) +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
+                      labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  scale_x_discrete(labels = c("Control" = expression(atop("Control", "n = 15")),
+                              "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 15")),
+                               "Drupella" = expression(atop(italic("Drupella"), "n = 15"))
+                                 )) +
+  labs(y = "Proportion Tissue Mortality\n", x = "", title = "a.") +
   geom_segment(aes(x = 1.8, xend = 2.2, y = 1.2, yend = 1.2)) +
   geom_text(aes(x = 2, y = 1.2, label = "*"), size = 14) +
   geom_text(data = porites_tissue_letters, aes(x = Snail, y = 1.1, label = Letters, colour = Treatment),
             position = position_dodge(0.75), size = 10, show.legend = F) +
    scale_y_continuous( breaks = seq(0,1,0.2)) +
-  geom_text(aes(x = 0.5, y = 0.7, label = "Temp: P < 0.001\nSnail: P < 0.0001\nInteraction: P = 0.59"), hjust = 0, size = 10) + 
+  geom_text(aes(x = 0.5, y = 0.7, label = "Temp: P < 0.001\nSnail: P < 0.0001\nInteraction: P = 0.84"), hjust = 0, size = 10) + 
   my_theme)
 
 (pocillopora_tissue_loss <- ggplot() +
   geom_boxplot(data = pocillopora_tissue, aes(x = Snail, y = Mortality, colour = Treatment), outlier.shape = NA) +
   geom_point(data = pocillopora_tissue,
              aes(x = Snail, y = Mortality, colour = Treatment), position = position_jitterdodge(0.3)) +
-  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF")) +
-  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
-  labs(y = "Proportion Tissue Mortality\n", x = "", title = expression(b ~ ". " ~ italic(Pocillopora) ~ " Mortality")) +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
+                      labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  scale_x_discrete(labels = c("Control" = expression(atop("Control", "n = 12")),
+                              "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 12")),
+                               "Drupella" = expression(atop(italic("Drupella"), "n = 12"))
+                                 )) +
+  labs(y = "Proportion Tissue Mortality\n", x = "", title = "b.") +
   geom_text(data = pocillopora_tissue_letters, aes(x = Snail, y = 1.1, label = Letters, colour = Treatment),
             position = position_dodge(0.75), size = 10, show.legend = F) +
    scale_y_continuous( breaks = seq(0,1,0.2)) +
@@ -596,5 +647,184 @@ pocillopora_tissue_letters <- data.frame(
 ```{r tissue loss plot, fig.height=14, fig.width=12}
 (tissue_loss_panel <- ggarrange(porites_tissue_loss, pocillopora_tissue_loss, nrow = 2, ncol = 1, common.legend = T, legend = "bottom"))
 
-# ggsave(here::here("output", "tissue_loss_panel_v1.png"), tissue_loss_panel, height = 14, width = 12)
+# ggsave(here::here("output", "tissue_loss_panel_v2.png"), tissue_loss_panel, height = 14, width = 12)
+```
+
+```{r pocillopora wax dipping }
+# read in data
+poc_wax_images <- read.csv(here::here("data", "pocillopora_wax_dipped_corals_images.csv"))
+poc_wax_images <- na.omit(poc_wax_images) # remove NAs from images that were not relevant for these analyses
+
+# subset just the front and back and side images
+poc_key_images <- subset(poc_wax_images, Image.number == 1 | Image.number == 3 | Image.number == 5)
+
+# sum to get planar area
+poc_front_back <- poc_key_images %>%
+  group_by(Coral.ID) %>%
+  summarise(Planar.area = sum(Area))
+
+# read wax dip area
+poc_wax_weights <- read.csv(here::here("data", "poc_wax_dipping.csv"))
+
+# remove cracked corals
+poc_wax_weights <- subset(poc_wax_weights, NOTES != "CRACKED")
+
+# subset for only corals that have image data - two were missing for some reason
+poc_wax_weights_subset <- poc_wax_weights[poc_wax_weights$Coral.ID %in% unique(poc_front_back$Coral.ID),]
+
+poc_wax_area <- merge(poc_front_back, poc_wax_weights_subset, by = "Coral.ID")
+
+# fit relationship of planar area to surface area to extract relationship
+area_mod <- lm(Surface.area ~ Planar.area, poc_wax_area)
+summary(area_mod) # intercept = 2.2198, slope = 0.9060
+performance::r2(area_mod) # R2 = 0.608 - not great but good
+
+```
+
+```{r pocillopora biomass}
+# get planar area from full tissue
+poc_tissue_long <- subset(tissue_long, Coral.species == "Pocillopora")
+
+# subset the relevant images and calculate planar area
+poc_surv_front_back <- subset(poc_tissue_long, Image.number == 1 | Image.number == 3 | Image.number == 5) %>%
+  group_by(Coral.ID) %>%
+  summarise(Planar.area = sum(Live.tissue))
+
+# merge with proportional mortality data
+poc_surv_tissue <- merge(poc_surv_front_back,
+                         pocillopora_tissue[pocillopora_tissue$Coral.ID %in% unique(poc_surv_front_back$Coral.ID),],
+                         by = "Coral.ID")
+
+# calculate surface area based on relationship between planar area and surface area from wax-dipped corals
+poc_surv_tissue$Surface.area <- 2.2198 + 0.9060*poc_surv_tissue$Planar.area
+
+# correct for proportional mortality - only include surviving tissue
+poc_surv_tissue$Surface.area.corrected <- poc_surv_tissue$Surface.area*(1-poc_surv_tissue$Mortality)
+
+# read biomass data
+poc_biomass <- read.csv(here::here("data", "pocillopora_biomass.csv"))
+
+# merge with surface area data 
+poc_biomass_full <- merge(poc_surv_tissue, poc_biomass, by = "Coral.ID")
+poc_biomass_full$Biomass <- poc_biomass_full$Tissue.weight/poc_biomass_full$Surface.area.corrected
+
+# explore data for modeling - 18 ambient, 9 heated. Uneven distribution across snail treatments. Thinking wilcox test. 
+table(poc_biomass_full$Snail, poc_biomass_full$Treatment)
+
+bwplot(Biomass ~ Treatment | Snail, data = poc_biomass_full) # looks like two big outliers
+
+
+
+hist(poc_biomass_full$Biomass)
+
+
+
+
+```
+```{r poc model}
+# simplest
+wilcox.test(Biomass ~ Treatment, poc_biomass_full) # P = 0.78
+
+# mixed model
+poc_bio_mod <- glmmTMB(Biomass ~ Treatment + (1|Colony.ID) + (1|Tank), family = Gamma("log"), data = poc_biomass_full[poc_biomass_full$Biomass < 0.03,])
+plot(simulateResiduals(poc_bio_mod)) # outliers detected (as expected) but otherwise fine
+summary(poc_bio_mod) # lots of variance in random effects - enhanced by uneven sample size
+Anova(poc_bio_mod) # X2 = 0.55, P = 0.46
+```
+
+
+```{r porites biomass setup}
+# Read surface arean and biomass data
+porites_biomass <- read.csv(here::here("data", "porites_biomass.csv"))
+
+# merge with mortality data
+porites_biomass_full <- merge(porites_tissue, porites_biomass, by = "Coral.ID")
+
+# correct foil-calculated SA with proportional mortality
+porites_biomass_full$Surface.area.corrected <- porites_biomass_full$Area*(1-porites_biomass_full$Mortality)
+
+# calculate tissue biomass - g cm-2
+porites_biomass_full$Biomass <- porites_biomass_full$Tissue_weight/porites_biomass_full$Surface.area.corrected
+
+# not corrected surface area
+porites_biomass_full$Biomass_full <- porites_biomass_full$Tissue_weight/porites_biomass_full$Area
+
+# remove corals that reached 100% mortality
+porites_biomass_full <- na.omit(porites_biomass_full)
+
+bwplot(Biomass ~ Treatment | Snail, data = porites_biomass_full) # 2-3 outliers
+bwplot(Tissue_weight ~ Treatment | Snail, data = porites_biomass_full) # seems to be driven by surface area correction
+bwplot(Biomass ~ Treatment , data = porites_biomass_full) # doesn't look significant
+
+# seems that just going by whole surface area doesn't inflate values as much
+bwplot(Biomass_full ~ Treatment | Snail, data = porites_biomass_full)
+
+
+```
+
+```{r porites biomass model}
+# model with snail
+por_bio_mod1 <- glmmTMB(Biomass ~ Treatment*Snail + (1|Colony.ID) + (1|Tank), family = Gamma("log"), data = porites_biomass_full)
+plot(simulateResiduals(por_bio_mod1)) # no issues in residuals
+summary(por_bio_mod1) # not much variance in random effects
+Anova(por_bio_mod1)
+#                  Chisq Df Pr(>Chisq)   
+# Treatment       6.6856  1    0.00972 **
+# Snail           0.5695  2    0.75221   
+# Treatment:Snail 0.1667  2    0.92001 
+
+# could probably remove snail interaction from model as it's not relevant to questions
+por_bio_mod2 <- glmmTMB(Biomass ~ Treatment + (1|Colony.ID) + (1|Tank), family = Gamma("log"), data = porites_biomass_full)
+plot(simulateResiduals(por_bio_mod2)) # no issues in residuals
+summary(por_bio_mod2) # not much variance in random effects
+Anova(por_bio_mod2) # X2 = 9.0, P = 0.002
+```
+```{r plot biomass}
+(porites_biomass_plot <-
+  ggplot() +
+  geom_boxplot(data = porites_biomass_full, aes(x = Treatment, y = Biomass, colour = Treatment), outlier.shape = NA) +
+  geom_point(data = porites_biomass_full,
+             aes(x = Treatment, y = Biomass, colour = Treatment), position = position_jitterdodge(0.3)) +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
+                      labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  labs(y = expression(Biomass ~ (g ~ cm^-2)),
+       x = "", title = "a.") +
+  scale_x_discrete(labels = c("Heated" = "Heated (30.5°C)\nn = 40", "Ambient" = "Ambient (28.5°C)\nn = 45")) +
+  geom_text(aes(x = 0.5, y = 0.0115, label = "GLMM\nX2 = 9.0, P = 0.002"), hjust = 0, size = 10) + 
+  my_theme)
+
+(pocillopora_biomass_plot <-
+  ggplot() +
+  geom_boxplot(data = poc_biomass_full,
+               aes(x = Treatment, y = Biomass, colour = Treatment), outlier.shape = NA) +
+  geom_point(data = poc_biomass_full,
+             aes(x = Treatment, y = Biomass, colour = Treatment), position = position_jitterdodge(0.3)) +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
+                      labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  scale_x_discrete(labels = c("Heated" = "Heated (30.5°C)\nn = 9", "Ambient" = "Ambient (28.5°C)\nn = 18")) +
+  labs(y = expression(Biomass ~ (g ~ cm^-2)),
+       x = "", title = "b.") +
+  geom_text(aes(x = 0.5, y = 0.03, label = "Wilxocon Rank Sum Test\nW = 75, P = 0.78"), hjust = 0, size = 10) + 
+  my_theme)
+```
+
+```{r biomass panel, fig.height=14, fig.width=12}
+(biomass_panel <- ggarrange(porites_biomass_plot, pocillopora_biomass_plot, nrow = 2, ncol = 1, common.legend = T, legend = "bottom"))
+
+# ggsave(here::here("output", "biomass_panel_v1.png"), biomass_panel, height = 14, width = 12)
+```
+
+```{r ambient temp summary}
+# read temp summary table from edi
+temp_url <- "https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-mcr.1045.5&entityid=7a8090507e95d40ba98d837388f7c506"
+temp <- read.csv(temp_url)
+str(temp)
+temp$date_local <- as.Date(temp$date_local) # convert date from chr to date
+
+# filter for relevant dates - date when I arrived and last date of snail collection
+entry <- "2024-04-27"
+collection <- "2024-05-11"
+temp_relev <- temp[temp$date_local >= entry & temp$date_local <= collection, ]
+# View(temp_relev) # gather relevant data on median/mean temps for pub
+
 ```

@@ -1,43 +1,43 @@
 Date of death,Days til death,Coral ID,Coral species,Treatment,Snail,Colony ID,Tank,Weight,Cap weight,Starting weight,Net change,Survived
-May 26,3,V-1 H D,Pocillopora,Heated,Drupella,Poc-1,Tank 6,25.6,16.8,26.5,-9.278350515,0
-May 27,4,V-2 H D,Pocillopora,Heated,Drupella,Poc-2,Tank 6,30.2,14.2,31.2,-5.882352941,0
-May 27,4,V-3 H D,Pocillopora,Heated,Drupella,Poc-3,Tank 6,18.6,14.8,19.1,-11.62790698,0
-May 27,4,V-4 H D,Pocillopora,Heated,Drupella,Poc-4,Tank 6,25.8,14.6,26.4,-5.084745763,0
-May 27,4,V-7 H D,Pocillopora,Heated,Drupella,Poc-7,Tank 7,37.9,19.3,38.8,-4.615384615,0
-May 29,6,V-9 H D,Pocillopora,Heated,Drupella,Poc-9,Tank 7,33.4,17.4,34.2,-4.761904762,0
-May 31,8,V-10 H D,Pocillopora,Heated,Drupella,Poc-10,Tank 7,41,12.5,41.9,-3.06122449,0
-May 28,5,V-11 H D,Pocillopora,Heated,Drupella,Poc-11,Tank 11,25.9,17.3,26.8,-9.473684211,0
-May 27,4,V-12 H D,Pocillopora,Heated,Drupella,Poc-12,Tank 11,20.2,11.9,20.8,-6.741573034,0
-May 27,4,V-13 H D,Pocillopora,Heated,Drupella,Poc-13,Tank 11,28.4,14.3,29.5,-7.236842105,0
-May 27,4,V-14 H D,Pocillopora,Heated,Drupella,Poc-14,Tank 11,30.7,16.4,32.3,-10.06289308,0
-May 28,5,V-15 H D,Pocillopora,Heated,Drupella,Poc-15,Tank 11,20.7,8.1,21.6,-6.666666667,0
+26-May,3,V-1 H D,Pocillopora,Heated,Drupella,Poc-1,Tank 6,25.6,16.8,26.5,-9.278350515,0
+27-May,4,V-2 H D,Pocillopora,Heated,Drupella,Poc-2,Tank 6,30.2,14.2,31.2,-5.882352941,0
+27-May,4,V-3 H D,Pocillopora,Heated,Drupella,Poc-3,Tank 6,18.6,14.8,19.1,-11.62790698,0
+27-May,4,V-4 H D,Pocillopora,Heated,Drupella,Poc-4,Tank 6,25.8,14.6,26.4,-5.084745763,0
+27-May,4,V-7 H D,Pocillopora,Heated,Drupella,Poc-7,Tank 7,37.9,19.3,38.8,-4.615384615,0
+29-May,6,V-9 H D,Pocillopora,Heated,Drupella,Poc-9,Tank 7,33.4,17.4,34.2,-4.761904762,0
+31-May,8,V-10 H D,Pocillopora,Heated,Drupella,Poc-10,Tank 7,41,12.5,41.9,-3.06122449,0
+28-May,5,V-11 H D,Pocillopora,Heated,Drupella,Poc-11,Tank 11,25.9,17.3,26.8,-9.473684211,0
+27-May,4,V-12 H D,Pocillopora,Heated,Drupella,Poc-12,Tank 11,20.2,11.9,20.8,-6.741573034,0
+27-May,4,V-13 H D,Pocillopora,Heated,Drupella,Poc-13,Tank 11,28.4,14.3,29.5,-7.236842105,0
+27-May,4,V-14 H D,Pocillopora,Heated,Drupella,Poc-14,Tank 11,30.7,16.4,32.3,-10.06289308,0
+28-May,5,V-15 H D,Pocillopora,Heated,Drupella,Poc-15,Tank 11,20.7,8.1,21.6,-6.666666667,0
 ,,V-1 A D,Pocillopora,Ambient,Drupella,Poc-1,Tank 8,24.6,13.8,25.5,-7.692307692,1
-May 29,6,V-2 A D,Pocillopora,Ambient,Drupella,Poc-2,Tank 8,32.7,10.7,34.3,-6.779661017,0
-May 28,5,V-3 A D,Pocillopora,Ambient,Drupella,Poc-3,Tank 8,24.4,16.9,25.3,-10.71428571,0
-May 28,5,V-4 A D,Pocillopora,Ambient,Drupella,Poc-4,Tank 8,27.3,16.1,27.8,-4.273504274,0
-May 27,4,V-7 A D,Pocillopora,Ambient,Drupella,Poc-7,Tank 2,34.8,20,35.9,-6.918238994,0
-May 29,6,V-9 A D,Pocillopora,Ambient,Drupella,Poc-9,Tank 2,30.3,17.5,31.2,-6.569343066,0
-May 27,4,V-10 A D,Pocillopora,Ambient,Drupella,Poc-10,Tank 2,31.9,16.6,33,-6.707317073,0
-May 29,6,V-11 A D,Pocillopora,Ambient,Drupella,Poc-11,Tank 10,20.2,9.3,21.3,-9.166666667,0
-May 29,6,V-12 A D,Pocillopora,Ambient,Drupella,Poc-12,Tank 10,29.4,14.9,30.4,-6.451612903,0
-May 31,8,V-13 A D,Pocillopora,Ambient,Drupella,Poc-13,Tank 10,36,10.3,38,-7.220216606,0
-May 28,5,V-14 A D,Pocillopora,Ambient,Drupella,Poc-14,Tank 10,24,12.9,24.9,-7.5,0
-May 27,4,V-15 A D,Pocillopora,Ambient,Drupella,Poc-15,Tank 10,21.9,8.4,22.7,-5.594405594,0
+29-May,6,V-2 A D,Pocillopora,Ambient,Drupella,Poc-2,Tank 8,32.7,10.7,34.3,-6.779661017,0
+28-May,5,V-3 A D,Pocillopora,Ambient,Drupella,Poc-3,Tank 8,24.4,16.9,25.3,-10.71428571,0
+28-May,5,V-4 A D,Pocillopora,Ambient,Drupella,Poc-4,Tank 8,27.3,16.1,27.8,-4.273504274,0
+27-May,4,V-7 A D,Pocillopora,Ambient,Drupella,Poc-7,Tank 2,34.8,20,35.9,-6.918238994,0
+29-May,6,V-9 A D,Pocillopora,Ambient,Drupella,Poc-9,Tank 2,30.3,17.5,31.2,-6.569343066,0
+27-May,4,V-10 A D,Pocillopora,Ambient,Drupella,Poc-10,Tank 2,31.9,16.6,33,-6.707317073,0
+29-May,6,V-11 A D,Pocillopora,Ambient,Drupella,Poc-11,Tank 10,20.2,9.3,21.3,-9.166666667,0
+29-May,6,V-12 A D,Pocillopora,Ambient,Drupella,Poc-12,Tank 10,29.4,14.9,30.4,-6.451612903,0
+31-May,8,V-13 A D,Pocillopora,Ambient,Drupella,Poc-13,Tank 10,36,10.3,38,-7.220216606,0
+28-May,5,V-14 A D,Pocillopora,Ambient,Drupella,Poc-14,Tank 10,24,12.9,24.9,-7.5,0
+27-May,4,V-15 A D,Pocillopora,Ambient,Drupella,Poc-15,Tank 10,21.9,8.4,22.7,-5.594405594,0
 ,,R-1 H D,Porites,Heated,Drupella,Rus-1,Tank 6,30.5,15.8,30,3.521126761,1
-May 28,5,R-2 H D,Porites,Heated,Drupella,Rus-2,Tank 6,21.9,14.9,22.8,-11.39240506,0
+28-May,5,R-2 H D,Porites,Heated,Drupella,Rus-2,Tank 6,21.9,14.9,22.8,-11.39240506,0
 ,,R-3 H D,Porites,Heated,Drupella,Rus-3,Tank 6,17.7,8.7,17.4,3.448275862,1
 ,,R-4 H D,Porites,Heated,Drupella,Rus-4,Tank 6,27.2,16.5,26,12.63157895,1
 ,,R-5 H D,Porites,Heated,Drupella,Rus-5,Tank 6,23.9,14.2,23.7,2.105263158,1
 ,,R-6 H D,Porites,Heated,Drupella,Rus-6,Tank 7,28.9,12.3,28.6,1.840490798,1
 ,,R-7 H D,Porites,Heated,Drupella,Rus-7,Tank 7,33.2,10,32.1,4.977375566,1
 ,,R-8 H D,Porites,Heated,Drupella,Rus-8,Tank 7,21,12.5,20.8,2.409638554,1
-,,R-9 H D,Porites,Heated,Drupella,Rus-9,Tank 7,17.8,10.6,17.6,2.857142857,1
+6-Jun,,R-9 H D,Porites,Heated,Drupella,Rus-9,Tank 7,17.8,10.6,17.6,2.857142857,1
 ,,R-10 H D,Porites,Heated,Drupella,Rus-10,Tank 7,15.8,11.3,15.5,7.142857143,1
 ,,R-11 H D,Porites,Heated,Drupella,Rus-11,Tank 11,23.4,15.6,22.9,6.849315068,1
 ,,R-12 H D,Porites,Heated,Drupella,Rus-12,Tank 11,19.8,13.8,19.6,3.448275862,1
-June 1,9,R-13 H D,Porites,Heated,Drupella,Rus-13,Tank 11,17,12.7,17.3,-6.52173913,0
-,,R-14 H D,Porites,Heated,Drupella,Rus-14,Tank 11,23.6,13,23.5,0.9523809524,1
-June 1,9,R-15 H D,Porites,Heated,Drupella,Rus-15,Tank 11,17.8,14.1,18,-5.128205128,0
+1-Jun,9,R-13 H D,Porites,Heated,Drupella,Rus-13,Tank 11,17,12.7,17.3,-6.52173913,0
+,,R-14 H D,Porites,Heated,Drupella,Rus-14,Tank 11,23.6,13,23.5,0.952380952,1
+1-Jun,9,R-15 H D,Porites,Heated,Drupella,Rus-15,Tank 11,17.8,14.1,18,-5.128205128,0
 ,,R-1 A D,Porites,Ambient,Drupella,Rus-1,Tank 8,23.8,13.2,23,8.163265306,1
 ,,R-2 A D,Porites,Ambient,Drupella,Rus-2,Tank 8,17.6,12.9,17.7,-2.083333333,1
 ,,R-3 A D,Porites,Ambient,Drupella,Rus-3,Tank 8,18,11.6,18.2,-3.03030303,1
@@ -48,37 +48,37 @@ June 1,9,R-15 H D,Porites,Heated,Drupella,Rus-15,Tank 11,17.8,14.1,18,-5.1282051
 ,,R-8 A D,Porites,Ambient,Drupella,Rus-8,Tank 2,21,12.3,20.7,3.571428571,1
 ,,R-9 A D,Porites,Ambient,Drupella,Rus-9,Tank 2,18,13.8,17.9,2.43902439,1
 ,,R-10 A D,Porites,Ambient,Drupella,Rus-10,Tank 2,26.2,16.7,25.6,6.741573034,1
-,,R-11 A D,Porites,Ambient,Drupella,Rus-11,Tank 10,29.2,17.3,29.1,0.8474576271,1
+,,R-11 A D,Porites,Ambient,Drupella,Rus-11,Tank 10,29.2,17.3,29.1,0.847457627,1
 ,,R-12 A D,Porites,Ambient,Drupella,Rus-12,Tank 10,18.1,13.1,18.3,-3.846153846,1
 ,,R-13 A D,Porites,Ambient,Drupella,Rus-13,Tank 10,21.4,14.6,21.3,1.492537313,1
 ,,R-14 A D,Porites,Ambient,Drupella,Rus-14,Tank 10,29,16.6,28,8.771929825,1
 ,,R-15 A D,Porites,Ambient,Drupella,Rus-15,Tank 10,26,14.3,25.5,4.464285714,1
-June 3,11,V-1 H V,Pocillopora,Heated,Coralliophila,Poc-1,Tank 6,30.2,19.7,30.9,-6.25,0
-May 27,4,V-2 H V,Pocillopora,Heated,Coralliophila,Poc-2,Tank 6,23.1,18.8,23.8,-14,0
-May 28,5,V-3 H V,Pocillopora,Heated,Coralliophila,Poc-3,Tank 6,24.8,15.3,25.6,-7.766990291,0
-May 28,5,V-4 H V,Pocillopora,Heated,Coralliophila,Poc-4,Tank 6,23.9,15.9,24.8,-10.11235955,0
+3-Jun,11,V-1 H V,Pocillopora,Heated,Coralliophila,Poc-1,Tank 6,30.2,19.7,30.9,-6.25,0
+27-May,4,V-2 H V,Pocillopora,Heated,Coralliophila,Poc-2,Tank 6,23.1,18.8,23.8,-14,0
+28-May,5,V-3 H V,Pocillopora,Heated,Coralliophila,Poc-3,Tank 6,24.8,15.3,25.6,-7.766990291,0
+28-May,5,V-4 H V,Pocillopora,Heated,Coralliophila,Poc-4,Tank 6,23.9,15.9,24.8,-10.11235955,0
 ,,V-7 H V,Pocillopora,Heated,Coralliophila,Poc-7,Tank 7,36.4,8.5,37.1,-2.447552448,1
-,,V-9 H V,Pocillopora,Heated,Coralliophila,Poc-9,Tank 7,33.5,15.1,33.4,0.5464480874,1
+,,V-9 H V,Pocillopora,Heated,Coralliophila,Poc-9,Tank 7,33.5,15.1,33.4,0.546448087,1
 ,,V-10 H V,Pocillopora,Heated,Coralliophila,Poc-10,Tank 7,23.6,14.2,23.5,1.075268817,1
-May 28,5,V-11 H V,Pocillopora,Heated,Coralliophila,Poc-11,Tank 11,19.2,13.6,19.8,-9.677419355,0
-May 28,5,V-12 H V,Pocillopora,Heated,Coralliophila,Poc-12,Tank 11,31.2,11.1,33.1,-8.636363636,0
-June 1,9,V-13 H V,Pocillopora,Heated,Coralliophila,Poc-13,Tank 11,28.2,11.7,29.6,-7.82122905,0
-May 25,2,V-14 H V,Pocillopora,Heated,Coralliophila,Poc-14,Tank 11,22.2,14.4,22.9,-8.235294118,0
+28-May,5,V-11 H V,Pocillopora,Heated,Coralliophila,Poc-11,Tank 11,19.2,13.6,19.8,-9.677419355,0
+28-May,5,V-12 H V,Pocillopora,Heated,Coralliophila,Poc-12,Tank 11,31.2,11.1,33.1,-8.636363636,0
+1-Jun,9,V-13 H V,Pocillopora,Heated,Coralliophila,Poc-13,Tank 11,28.2,11.7,29.6,-7.82122905,0
+25-May,2,V-14 H V,Pocillopora,Heated,Coralliophila,Poc-14,Tank 11,22.2,14.4,22.9,-8.235294118,0
 ,,V-15 H V,Pocillopora,Heated,Coralliophila,Poc-15,Tank 11,37.4,9.6,38.6,-4.137931034,1
 ,,V-1 A V,Pocillopora,Ambient,Coralliophila,Poc-1,Tank 8,27.5,14.2,28.6,-7.638888889,1
 ,,V-2 A V,Pocillopora,Ambient,Coralliophila,Poc-2,Tank 8,20.5,12.6,21.2,-8.139534884,1
 ,,V-3 A V,Pocillopora,Ambient,Coralliophila,Poc-3,Tank 8,29.4,13,30.6,-6.818181818,1
-,,V-4 A V,Pocillopora,Ambient,Coralliophila,Poc-4,Tank 8,23.6,13.3,23.7,-0.9615384615,1
+,,V-4 A V,Pocillopora,Ambient,Coralliophila,Poc-4,Tank 8,23.6,13.3,23.7,-0.961538462,1
 ,,V-7 A V,Pocillopora,Ambient,Coralliophila,Poc-7,Tank 2,26.8,11.3,26.9,-0.641025641,1
-,,V-9 A V,Pocillopora,Ambient,Coralliophila,Poc-9,Tank 2,31.1,16.7,31.2,-0.6896551724,1
+,,V-9 A V,Pocillopora,Ambient,Coralliophila,Poc-9,Tank 2,31.1,16.7,31.2,-0.689655172,1
 ,,V-10 A V,Pocillopora,Ambient,Coralliophila,Poc-10,Tank 2,27.6,18.5,27.6,0,1
 ,,V-11 A V,Pocillopora,Ambient,Coralliophila,Poc-11,Tank 10,27.8,13.5,28.5,-4.666666667,1
-May 30,7,V-12 A V,Pocillopora,Ambient,Coralliophila,Poc-12,Tank 10,32.1,13.1,33.3,-5.940594059,0
-May 31,8,V-13 A V,Pocillopora,Ambient,Coralliophila,Poc-13,Tank 10,26.3,11.1,27.4,-6.748466258,0
-May 27,4,V-14 A V,Pocillopora,Ambient,Coralliophila,Poc-14,Tank 10,20.3,7.3,21.1,-5.797101449,0
+30-May,7,V-12 A V,Pocillopora,Ambient,Coralliophila,Poc-12,Tank 10,32.1,13.1,33.3,-5.940594059,0
+31-May,8,V-13 A V,Pocillopora,Ambient,Coralliophila,Poc-13,Tank 10,26.3,11.1,27.4,-6.748466258,0
+27-May,4,V-14 A V,Pocillopora,Ambient,Coralliophila,Poc-14,Tank 10,20.3,7.3,21.1,-5.797101449,0
 ,,V-15 A V,Pocillopora,Ambient,Coralliophila,Poc-15,Tank 10,29.2,8.1,29.7,-2.314814815,1
 ,,R-1 H V,Porites,Heated,Coralliophila,Rus-1,Tank 6,19.7,12.5,19.6,1.408450704,1
-May 28,5,R-2 H V,Porites,Heated,Coralliophila,Rus-2,Tank 6,25.4,17.4,26.2,-9.090909091,0
+28-May,5,R-2 H V,Porites,Heated,Coralliophila,Rus-2,Tank 6,25.4,17.4,26.2,-9.090909091,0
 ,,R-3 H V,Porites,Heated,Coralliophila,Rus-3,Tank 6,16.3,11.5,16.1,4.347826087,1
 ,,R-4 H V,Porites,Heated,Coralliophila,Rus-4,Tank 6,36.4,13.5,34.2,10.62801932,1
 ,,R-5 H V,Porites,Heated,Coralliophila,Rus-5,Tank 6,36,17.1,36.2,-1.047120419,1
@@ -98,26 +98,26 @@ May 28,5,R-2 H V,Porites,Heated,Coralliophila,Rus-2,Tank 6,25.4,17.4,26.2,-9.090
 ,,R-4 A V,Porites,Ambient,Coralliophila,Rus-4,Tank 8,26.9,18,26.5,4.705882353,1
 ,,R-5 A V,Porites,Ambient,Coralliophila,Rus-5,Tank 8,30.7,16.2,30.1,4.316546763,1
 ,,R-6 A V,Porites,Ambient,Coralliophila,Rus-6,Tank 2,26.1,13.5,25.6,4.132231405,1
-,,R-7 A V,Porites,Ambient,Coralliophila,Rus-7,Tank 2,36.5,13.8,36.6,-0.4385964912,1
+,,R-7 A V,Porites,Ambient,Coralliophila,Rus-7,Tank 2,36.5,13.8,36.6,-0.438596491,1
 ,,R-8 A V,Porites,Ambient,Coralliophila,Rus-8,Tank 2,33.4,12.4,32.7,3.448275862,1
 ,,R-9 A V,Porites,Ambient,Coralliophila,Rus-9,Tank 2,17.5,13,17.4,2.272727273,1
 ,,R-10 A V,Porites,Ambient,Coralliophila,Rus-10,Tank 2,14.1,10.8,14,3.125,1
 ,,R-11 A V,Porites,Ambient,Coralliophila,Rus-11,Tank 10,22.8,14.7,22.4,5.194805195,1
-,,R-12 A V,Porites,Ambient,Coralliophila,Rus-12,Tank 10,27.2,16.9,27.1,0.9803921569,1
+,,R-12 A V,Porites,Ambient,Coralliophila,Rus-12,Tank 10,27.2,16.9,27.1,0.980392157,1
 ,,R-13 A V,Porites,Ambient,Coralliophila,Rus-13,Tank 10,27.6,16.5,27.6,0,1
 ,,R-14 A V,Porites,Ambient,Coralliophila,Rus-14,Tank 10,27.5,16.3,27.5,0,1
-,,R-15 A V,Porites,Ambient,Coralliophila,Rus-15,Tank 10,24.9,13.1,24.8,0.8547008547,1
+,,R-15 A V,Porites,Ambient,Coralliophila,Rus-15,Tank 10,24.9,13.1,24.8,0.854700855,1
 ,,V-1 H C,Pocillopora,Heated,Control,Poc-1,Tank 6,21.3,15.7,21.1,3.703703704,1
-May 29,6,V-2 H C,Pocillopora,Heated,Control,Poc-2,Tank 6,18.6,10.7,19.1,-5.952380952,0
-June 5,13,V-3 H C,Pocillopora,Heated,Control,Poc-3,Tank 6,44.9,19.8,45.9,-3.831417625,0
-May 28,5,V-4 H C,Pocillopora,Heated,Control,Poc-4,Tank 6,25.8,15.3,26.4,-5.405405405,0
-June 4,12,V-7 H C,Pocillopora,Heated,Control,Poc-7,Tank 7,25,15,24.9,1.01010101,0
+29-May,6,V-2 H C,Pocillopora,Heated,Control,Poc-2,Tank 6,18.6,10.7,19.1,-5.952380952,0
+5-Jun,13,V-3 H C,Pocillopora,Heated,Control,Poc-3,Tank 6,44.9,19.8,45.9,-3.831417625,0
+28-May,5,V-4 H C,Pocillopora,Heated,Control,Poc-4,Tank 6,25.8,15.3,26.4,-5.405405405,0
+4-Jun,12,V-7 H C,Pocillopora,Heated,Control,Poc-7,Tank 7,25,15,24.9,1.01010101,0
 ,,V-9 H C,Pocillopora,Heated,Control,Poc-9,Tank 7,27.5,16.6,27.8,-2.678571429,1
 ,,V-10 H C,Pocillopora,Heated,Control,Poc-10,Tank 7,26.4,13.7,26.6,-1.550387597,1
-May 31,8,V-11 H C,Pocillopora,Heated,Control,Poc-11,Tank 11,25.5,14.7,26,-4.424778761,0
-May 29,6,V-12 H C,Pocillopora,Heated,Control,Poc-12,Tank 11,19.7,10.2,20.7,-9.523809524,0
+31-May,8,V-11 H C,Pocillopora,Heated,Control,Poc-11,Tank 11,25.5,14.7,26,-4.424778761,0
+29-May,6,V-12 H C,Pocillopora,Heated,Control,Poc-12,Tank 11,19.7,10.2,20.7,-9.523809524,0
 ,,V-13 H C,Pocillopora,Heated,Control,Poc-13,Tank 11,37.4,10.3,38.1,-2.517985612,1
-May 29,6,V-14 H C,Pocillopora,Heated,Control,Poc-14,Tank 11,19.9,14.2,20.4,-8.064516129,0
+29-May,6,V-14 H C,Pocillopora,Heated,Control,Poc-14,Tank 11,19.9,14.2,20.4,-8.064516129,0
 ,,V-15 H C,Pocillopora,Heated,Control,Poc-15,Tank 11,24.9,9.1,25.1,-1.25,1
 ,,V-1 A C,Pocillopora,Ambient,Control,Poc-1,Tank 8,28.8,17.3,29.2,-3.361344538,1
 ,,V-2 A C,Pocillopora,Ambient,Control,Poc-2,Tank 8,20.8,12.5,21.3,-5.681818182,1
@@ -126,11 +126,11 @@ May 29,6,V-14 H C,Pocillopora,Heated,Control,Poc-14,Tank 11,19.9,14.2,20.4,-8.06
 ,,V-7 A C,Pocillopora,Ambient,Control,Poc-7,Tank 2,25.5,17.4,25.9,-4.705882353,1
 ,,V-9 A C,Pocillopora,Ambient,Control,Poc-9,Tank 2,31.7,18.6,32,-2.23880597,1
 ,,V-10 A C,Pocillopora,Ambient,Control,Poc-10,Tank 2,24.5,13.5,24.5,0,1
-May 30,7,V-11 A C,Pocillopora,Ambient,Control,Poc-11,Tank 10,24.8,18,25.7,-11.68831169,0
-May 28,5,V-12 A C,Pocillopora,Ambient,Control,Poc-12,Tank 10,22.3,11.7,23.2,-7.826086957,0
+30-May,7,V-11 A C,Pocillopora,Ambient,Control,Poc-11,Tank 10,24.8,18,25.7,-11.68831169,0
+28-May,5,V-12 A C,Pocillopora,Ambient,Control,Poc-12,Tank 10,22.3,11.7,23.2,-7.826086957,0
 ,,V-13 A C,Pocillopora,Ambient,Control,Poc-13,Tank 10,33.7,12.6,34.1,-1.860465116,1
-May 28,5,V-14 A C,Pocillopora,Ambient,Control,Poc-14,Tank 10,19.2,13.4,19.9,-10.76923077,0
-May 30,7,V-15 A C,Pocillopora,Ambient,Control,Poc-15,Tank 10,22.1,14.2,23.2,-12.22222222,0
+28-May,5,V-14 A C,Pocillopora,Ambient,Control,Poc-14,Tank 10,19.2,13.4,19.9,-10.76923077,0
+30-May,7,V-15 A C,Pocillopora,Ambient,Control,Poc-15,Tank 10,22.1,14.2,23.2,-12.22222222,0
 ,,R-1 H C,Porites,Heated,Control,Rus-1,Tank 6,21.3,15.7,20.7,12,1
 ,,R-2 H C,Porites,Heated,Control,Rus-2,Tank 6,21.1,14.7,20.8,4.918032787,1
 ,,R-3 H C,Porites,Heated,Control,Rus-3,Tank 6,23.2,11.2,22.8,3.448275862,1
@@ -138,7 +138,7 @@ May 30,7,V-15 A C,Pocillopora,Ambient,Control,Poc-15,Tank 10,22.1,14.2,23.2,-12.
 ,,R-5 H C,Porites,Heated,Control,Rus-5,Tank 6,28.4,11.6,27.1,8.387096774,1
 ,,R-6 H C,Porites,Heated,Control,Rus-6,Tank 7,19.3,11.9,18.9,5.714285714,1
 ,,R-7 H C,Porites,Heated,Control,Rus-7,Tank 7,27.6,17.7,27.1,5.319148936,1
-,,R-8 H C,Porites,Heated,Control,Rus-8,Tank 7,22.3,11.5,22.4,-0.9174311927,1
+,,R-8 H C,Porites,Heated,Control,Rus-8,Tank 7,22.3,11.5,22.4,-0.917431193,1
 ,,R-9 H C,Porites,Heated,Control,Rus-9,Tank 7,17.4,10.5,16.9,7.8125,1
 ,,R-10 H C,Porites,Heated,Control,Rus-10,Tank 7,22.8,15.3,22.4,5.633802817,1
 ,,R-11 H C,Porites,Heated,Control,Rus-11,Tank 11,19.8,13,19.2,9.677419355,1
