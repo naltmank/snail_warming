@@ -814,6 +814,125 @@ Anova(por_bio_mod2) # X2 = 9.0, P = 0.002
 # ggsave(here::here("output", "biomass_panel_v1.png"), biomass_panel, height = 14, width = 12)
 ```
 
+```{r snail feeding data setup}
+feeding_base <- read.csv(here::here("data", "snail_feeding.csv"))
+str(feeding_base)
+
+# Controls had no snail --> NA
+# Coralliophila never observed feeding on Pocillopora --> NA for faster removal
+# Snail was removed and had respiration measured after coral died --> NA
+# Remove NAs from dataset
+feeding_subset <- na.omit(feeding_base)
+
+# merge with coral metadata
+meta_cols <- c("Coral.ID", "Coral.species", "Treatment", "Snail", "Colony.ID", "Tank")
+coral_meta <- growth[,which(names(growth) %in% meta_cols)]
+feeding_comb <- merge(feeding_subset, coral_meta, by = "Coral.ID")
+
+# corals to be analyzed separately
+porites_feeding <- subset(feeding_comb, Coral.species == "Porites")
+pocillopora_feeding <- subset(feeding_comb, Coral.species == "Pocillopora")
+```
+
+```{r feeding models}
+#### porites - model interaction between treatment and snail ####
+# Coral ID nested in Colony ID, accounting for repeated measures
+porites_feeding_mod <- glmmTMB(Feeding_binary ~ Treatment*Snail + (1|Tank) + (1|Colony.ID/Coral.ID),
+                               family = binomial(), data = porites_feeding)
+plot(simulateResiduals(porites_feeding_mod)) # no issues
+summary(porites_feeding_mod)
+Anova(porites_feeding_mod)
+#                   Chisq Df Pr(>Chisq)    
+# Treatment        3.3854  1  0.0657756 .  
+# Snail           56.3149  1  6.174e-14 ***
+# Treatment:Snail 12.3291  1  0.0004459 ***
+
+# pairwise comparisons
+emmeans(porites_feeding_mod, pairwise ~ Treatment | Snail) # significantly more likely to see drupella feeding in heated trt
+# $contrasts
+# Snail = Coralliophila:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated     1.26 0.782 Inf   1.617  0.1060
+# 
+# Snail = Drupella:
+#  contrast         estimate    SE  df z.ratio p.value
+#  Ambient - Heated    -2.29 0.628 Inf  -3.652  0.0003
+
+emmeans(porites_feeding_mod, pairwise ~ Snail | Treatment) # but more likely to see Coralliophila feeding overall
+# $contrasts
+# Treatment = Ambient:
+#  contrast                 estimate    SE  df z.ratio p.value
+#  Coralliophila - Drupella     6.18 0.815 Inf   7.584  <.0001
+# 
+# Treatment = Heated:
+#  contrast                 estimate    SE  df z.ratio p.value
+#  Coralliophila - Drupella     2.63 0.669 Inf   3.927  0.0001
+
+# extract emmeans for plotting
+porites_feeding_emmeans <- as.data.frame(emmeans(porites_feeding_mod, pairwise ~ Treatment | Snail)$emmeans)
+
+# backtransform emmeans to be on response scale
+inv_logit <- function(x){
+  exp(x)/(1+exp(x))
+}
+
+porites_feeding_emmeans$response <- inv_logit(porites_feeding_emmeans$emmean)
+porites_feeding_emmeans$lower.CI <- inv_logit(porites_feeding_emmeans$asymp.LCL)
+porites_feeding_emmeans$upper.CI <- inv_logit(porites_feeding_emmeans$asymp.UCL)
+
+#### pocillopora - only drupella observed feeding, so only model treatment ####
+# model convergence problem when I include colony ID - dropping from this model
+# overspecified
+pocillopora_feeding_mod <- glmmTMB(Feeding_binary ~ Treatment + (1|Tank) + (1|Coral.ID),
+                               family = binomial(), data = pocillopora_feeding)
+plot(simulateResiduals(pocillopora_feeding_mod)) # no issues
+summary(pocillopora_feeding_mod)
+Anova(pocillopora_feeding_mod) # X2 = 3.5, P = 0.062
+# suggestive, but not significant
+
+# extract plotting data as above with porites
+pocillopora_feeding_emmeans <- as.data.frame(emmeans(pocillopora_feeding_mod, pairwise ~ Treatment )$emmeans)
+pocillopora_feeding_emmeans$response <- inv_logit(pocillopora_feeding_emmeans$emmean)
+pocillopora_feeding_emmeans$lower.CI <- inv_logit(pocillopora_feeding_emmeans$asymp.LCL)
+pocillopora_feeding_emmeans$upper.CI <- inv_logit(pocillopora_feeding_emmeans$asymp.UCL)
+```
+
+```{r plot feeding behavior, fig.height  = 8, fig.width=8}
+(porites_feeding_plot <-
+  ggplot() +
+  geom_point(data = porites_feeding_emmeans, aes(x = Snail, y = response, colour = Treatment), position = position_dodge(0.3),
+             size = 5) +
+  geom_errorbar(data = porites_feeding_emmeans, aes(x = Snail, ymin = lower.CI, ymax = upper.CI,
+                                                    colour = Treatment), width = 0.3, position = position_dodge(0.3)) +
+  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
+                      labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  labs(y = expression(italic(P(Feeding))), title = "a.", x = "") + 
+  geom_segment(aes(x = 1.8, xend = 2.2, y = 0.95, yend = 0.95)) +
+  geom_text(aes(x = 2, y = 1, label = "***"), size = 8) +
+  geom_text(aes(x = 0.5, y = 0.25, label = "Temp: P 0.07\nSnail:P < 0.001\nInteraction: P < 0.001"), size = 10, hjust = 0) +
+  my_theme)
+  
+(pocillopora_feeding_plot <-
+  ggplot() +
+  geom_point(data = pocillopora_feeding_emmeans, aes(x = Treatment, y = response, colour = Treatment), position = position_dodge(0.3),
+             size = 5) +
+  geom_errorbar(data = pocillopora_feeding_emmeans, aes(x = Treatment, ymin = lower.CI, ymax = upper.CI,
+                                                    colour = Treatment), width = 0.3, position = position_dodge(0.3)) +
+  scale_x_discrete(labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
+                      labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
+  labs(y = expression(italic(P(Feeding))), title = "b.", x = "") + 
+  geom_text(aes(x = 0.5, y = 0.7, label = "GLMM\nX2 = 3.5, P = 0.06"), size = 10, hjust = 0) +
+  my_theme)
+```
+
+```{r feeding panel, fig.height=14, fig.width=12}
+(feeding_panel <- ggarrange(porites_feeding_plot, pocillopora_feeding_plot, nrow = 2, ncol = 1, common.legend = T, legend = "bottom"))
+
+# ggsave(here::here("output", "feeding_panel_v1.png"), feeding_panel, height = 14, width = 12)
+```
+
 ```{r ambient temp summary}
 # read temp summary table from edi
 temp_url <- "https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-mcr.1045.5&entityid=7a8090507e95d40ba98d837388f7c506"
