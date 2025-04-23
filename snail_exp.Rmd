@@ -33,7 +33,7 @@ coral_limits <- c("Pocillopora", "Porites")
 coral_colors <-  c("Pocillopora" = "#0072B2", "Porites" = "#D55E00")
 
 
-snail_labels <- c("Control", expression(italic("Coralliophila")), expression(italic("Drupella")))
+snail_labels <- c("Control", expression(italic("C.~violacea")), expression(italic("D.~cornus")))
 snail_limits <- c("Control", "Coralliophila", "Drupella")
 snail_colors <- c("Control" = "grey20", "Coralliophila" = "darkviolet", "Drupella" = "dodgerblue2")
 
@@ -100,7 +100,7 @@ proportions <- choice_long %>%
   labs(x = "", y = "Proportion of Choices\n", fill = "Prey") +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)),
                      breaks = seq(0, 1, 0.25)) +  
-  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
+  scale_x_discrete(labels = c("Coralliophila" = expression(italic(C.~violacea)), "Drupella" = expression(italic(D.~cornus)))) +
   my_theme)
 
 # ggsave(here::here("output", "snail_choice_plot_v1.png"), choice_plot, height = 15, width = 15)
@@ -171,7 +171,10 @@ emmeans(fed_mod, pairwise ~ Snail | Temp) # Drup resp always higher than Coralli
 #  Coralliophila - Drupella   -0.604 0.129 Inf  -4.670  <.0001
 
 
-  
+# fed_mod_2 <- glmmTMB(abs(Respiration) ~ Temp*Snail*Coral + (1|Tank), data = fed, family = Gamma(link = "log"))
+# plot(simulateResiduals(fed_mod_2)) # similar to above
+# summary(fed_mod_2)
+# Anova(fed_mod_2) # no coral interaction - all good
 ```
 
 ```{r plot respiration, fig.height = 10, fig.width=12}
@@ -183,8 +186,8 @@ emmeans(fed_mod, pairwise ~ Snail | Temp) # Drup resp always higher than Coralli
   scale_y_continuous(trans = "log10") +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
-  scale_x_discrete(labels = c("Coralliophila" = expression(atop(italic("Coralliophila"), "n = 53")),
-                              "Drupella" = expression(atop(italic("Drupella"), "n = 54"))
+  scale_x_discrete(labels = c("Coralliophila" = expression(atop(italic("C. violacea"), "n = 53")),
+                              "Drupella" = expression(atop(italic("D. cornus"), "n = 54"))
                               )
                    ) +
   labs(y = expression(Respiration ~ (mu * mol ~ O[2] ~ g ~ h^-1)), x = "") +
@@ -277,14 +280,14 @@ porites_letters <- data.frame(
   facet_wrap(~ Treatment,
              labeller = as_labeller(c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)"))) +
   scale_colour_manual(values = snail_colors,
-                      labels = c("Control" = expression(atop("Control", "     n = 15")),
-                                 "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 15")),
-                                 "Drupella" = expression(atop(italic("Drupella"), "     n = 15"))
+                      labels = c("Control" = expression(atop("Control", "    n = 15")),
+                                 "Coralliophila" = expression(atop(italic("C. violacea"), " n = 15")),
+                                 "Drupella" = expression(atop(italic("D. cornus"), "    n = 15"))
                                  )
                       ) +
   scale_x_discrete(labels = c("Control" = "Control",
-                              "Coralliophila" = expression(italic("Coralliophila")),
-                              "Drupella" = expression(italic("Drupella"))
+                              "Coralliophila" = expression(italic("C. violacea")),
+                              "Drupella" = expression(italic("D. cornus"))
                               )
                    ) +
   labs(y = "Net Growth (% Change)", x = "", title = "a.") +
@@ -433,15 +436,15 @@ survival_stats <- data.frame(
   facet_wrap(~ Treatment,
              labeller = as_labeller(c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)"))) +
   scale_colour_manual(values = snail_colors,
-                      labels = c("Control" = expression(atop("Control", "     n = 12")),
-                                 "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 12")),
-                                 "Drupella" = expression(atop(italic("Drupella"), "     n = 12"))
+                      labels = c("Control" = expression(atop("Control", "    n = 12")),
+                                 "Coralliophila" = expression(atop(italic("C. violacea"), "n = 12")),
+                                 "Drupella" = expression(atop(italic("D. cornus"), "    n = 12"))
                                  )
                       ) +
   scale_fill_manual(values = snail_colors,
-                      labels = c("Control" = expression(atop("Control", "     n = 12")),
-                                 "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 12")),
-                                 "Drupella" = expression(atop(italic("Drupella"), "     n = 12"))
+                      labels = c("Control" = expression(atop("Control", "    n = 12")),
+                                 "Coralliophila" = expression(atop(italic("C. violacea"), "n = 12")),
+                                 "Drupella" = expression(atop(italic("D. cornus"), "    n = 12"))
                                  )
                       ) +
   labs(
@@ -460,9 +463,11 @@ survival_stats <- data.frame(
 
 # I ANNOTATED THIS FURTHER IN PHOTOSHOP TO ADD RELEVANT STATISTICAL INFO TO BOTH PLOTS
 
-# ggsave(here::here("output", "growth_survival_plot_v3.png"), growth_surv_panel, height = 18, width = 20)
+# ggsave(here::here("output", "growth_survival_plot_v4.png"), growth_surv_panel, height = 18, width = 20)
 
 ```
+
+
 
 ```{r tissue loss}
 # read data
@@ -607,39 +612,39 @@ pocillopora_tissue_letters <- data.frame(
 
 ```{r tissue loss plots, fig.height=8, fig.width=12}
 (porites_tissue_loss <- ggplot() +
-  geom_boxplot(data = porites_tissue, aes(x = Snail, y = Mortality, colour = Treatment), outlier.shape = NA) +
+  geom_boxplot(data = porites_tissue, aes(x = Snail, y = Mortality*100, colour = Treatment), outlier.shape = NA) +
   geom_point(data = porites_tissue,
-             aes(x = Snail, y = Mortality, colour = Treatment), position = position_jitterdodge(0.3)) +
+             aes(x = Snail, y = Mortality*100, colour = Treatment), position = position_jitterdodge(0.3)) +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
   scale_x_discrete(labels = c("Control" = expression(atop("Control", "n = 15")),
-                              "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 15")),
-                               "Drupella" = expression(atop(italic("Drupella"), "n = 15"))
+                              "Coralliophila" = expression(atop(italic("C. violacea"), "n = 15")),
+                               "Drupella" = expression(atop(italic("D. cornus"), "n = 15"))
                                  )) +
-  labs(y = "Proportion Tissue Mortality\n", x = "", title = "a.") +
-  geom_segment(aes(x = 1.8, xend = 2.2, y = 1.2, yend = 1.2)) +
-  geom_text(aes(x = 2, y = 1.2, label = "*"), size = 14) +
-  geom_text(data = porites_tissue_letters, aes(x = Snail, y = 1.1, label = Letters, colour = Treatment),
+  labs(y = "Tissue Mortality (%)\n", x = "", title = "a.") +
+  geom_segment(aes(x = 1.8, xend = 2.2, y = 120, yend = 120)) +
+  geom_text(aes(x = 2, y = 120, label = "*"), size = 14) +
+  geom_text(data = porites_tissue_letters, aes(x = Snail, y = 110, label = Letters, colour = Treatment),
             position = position_dodge(0.75), size = 10, show.legend = F) +
-   scale_y_continuous( breaks = seq(0,1,0.2)) +
-  geom_text(aes(x = 0.5, y = 0.7, label = "Temp: P < 0.001\nSnail: P < 0.0001\nInteraction: P = 0.84"), hjust = 0, size = 10) + 
+   scale_y_continuous( breaks = seq(0,100,20)) +
+  geom_text(aes(x = 0.5, y = 70, label = "Temp: P < 0.001\nSnail: P < 0.0001\nInteraction: P = 0.84"), hjust = 0, size = 10) + 
   my_theme)
 
 (pocillopora_tissue_loss <- ggplot() +
-  geom_boxplot(data = pocillopora_tissue, aes(x = Snail, y = Mortality, colour = Treatment), outlier.shape = NA) +
+  geom_boxplot(data = pocillopora_tissue, aes(x = Snail, y = Mortality*100, colour = Treatment), outlier.shape = NA) +
   geom_point(data = pocillopora_tissue,
-             aes(x = Snail, y = Mortality, colour = Treatment), position = position_jitterdodge(0.3)) +
+             aes(x = Snail, y = Mortality*100, colour = Treatment), position = position_jitterdodge(0.3)) +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
   scale_x_discrete(labels = c("Control" = expression(atop("Control", "n = 12")),
-                              "Coralliophila" = expression(atop(italic("Coralliophila"), "n = 12")),
-                               "Drupella" = expression(atop(italic("Drupella"), "n = 12"))
+                              "Coralliophila" = expression(atop(italic("C. violacea"), "n = 12")),
+                               "Drupella" = expression(atop(italic("D. cornus"), "n = 12"))
                                  )) +
-  labs(y = "Proportion Tissue Mortality\n", x = "", title = "b.") +
-  geom_text(data = pocillopora_tissue_letters, aes(x = Snail, y = 1.1, label = Letters, colour = Treatment),
+  labs(y = "Tissue Mortality (%)\n", x = "", title = "b.") +
+  geom_text(data = pocillopora_tissue_letters, aes(x = Snail, y = 110, label = Letters, colour = Treatment),
             position = position_dodge(0.75), size = 10, show.legend = F) +
-   scale_y_continuous( breaks = seq(0,1,0.2)) +
-  geom_text(aes(x = 3.5, y = 0.2, label = "Temp: P = 0.23\nSnail: P = 0.006\nInteraction: P = 0.45"), hjust = 1, size = 10) + 
+   scale_y_continuous( breaks = seq(0,100,20)) +
+  geom_text(aes(x = 3.5, y = 20, label = "Temp: P = 0.23\nSnail: P = 0.006\nInteraction: P = 0.45"), hjust = 1, size = 10) + 
   my_theme)
 
 ```
@@ -678,6 +683,7 @@ poc_wax_area <- merge(poc_front_back, poc_wax_weights_subset, by = "Coral.ID")
 area_mod <- lm(Surface.area ~ Planar.area, poc_wax_area)
 summary(area_mod) # intercept = 2.2198, slope = 0.9060
 performance::r2(area_mod) # R2 = 0.608 - not great but good
+plot(poc_wax_area$Planar.area, poc_wax_area$Surface.area, xlab = "Planar area", ylab = "Wax dipped surface area")
 
 ```
 
@@ -721,6 +727,7 @@ hist(poc_biomass_full$Biomass)
 
 
 ```
+
 ```{r poc model}
 # simplest
 wilcox.test(Biomass ~ Treatment, poc_biomass_full) # P = 0.78
@@ -904,10 +911,10 @@ pocillopora_feeding_emmeans$upper.CI <- inv_logit(pocillopora_feeding_emmeans$as
              size = 5) +
   geom_errorbar(data = porites_feeding_emmeans, aes(x = Snail, ymin = lower.CI, ymax = upper.CI,
                                                     colour = Treatment), width = 0.3, position = position_dodge(0.3)) +
-  scale_x_discrete(labels = c("Coralliophila" = expression(italic(Coralliophila)), "Drupella" = expression(italic(Drupella)))) +
+  scale_x_discrete(labels = c("Coralliophila" = expression(italic(C.~violacea)), "Drupella" = expression(italic(D.~cornus)))) +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
-  labs(y = expression(italic(P(Feeding))), title = "a.", x = "") + 
+  labs(y = "Feeding Probability\n", title = "a.", x = "") + 
   geom_segment(aes(x = 1.8, xend = 2.2, y = 0.95, yend = 0.95)) +
   geom_text(aes(x = 2, y = 1, label = "***"), size = 8) +
   geom_text(aes(x = 0.5, y = 0.25, label = "Temp: P 0.07\nSnail:P < 0.001\nInteraction: P < 0.001"), size = 10, hjust = 0) +
@@ -918,11 +925,11 @@ pocillopora_feeding_emmeans$upper.CI <- inv_logit(pocillopora_feeding_emmeans$as
   geom_point(data = pocillopora_feeding_emmeans, aes(x = Treatment, y = response, colour = Treatment), position = position_dodge(0.3),
              size = 5) +
   geom_errorbar(data = pocillopora_feeding_emmeans, aes(x = Treatment, ymin = lower.CI, ymax = upper.CI,
-                                                    colour = Treatment), width = 0.3, position = position_dodge(0.3)) +
+                                                    colour = Treatment), width = 0.15, position = position_dodge(0.3)) +
   scale_x_discrete(labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
-  labs(y = expression(italic(P(Feeding))), title = "b.", x = "") + 
+  labs(y = "Feeding Probability\n", title = "b.", x = "") + 
   geom_text(aes(x = 0.5, y = 0.7, label = "GLMM\nX2 = 3.5, P = 0.06"), size = 10, hjust = 0) +
   my_theme)
 ```
@@ -930,7 +937,7 @@ pocillopora_feeding_emmeans$upper.CI <- inv_logit(pocillopora_feeding_emmeans$as
 ```{r feeding panel, fig.height=14, fig.width=12}
 (feeding_panel <- ggarrange(porites_feeding_plot, pocillopora_feeding_plot, nrow = 2, ncol = 1, common.legend = T, legend = "bottom"))
 
-# ggsave(here::here("output", "feeding_panel_v1.png"), feeding_panel, height = 14, width = 12)
+# ggsave(here::here("output", "feeding_panel_v2.png"), feeding_panel, height = 14, width = 12)
 ```
 
 ```{r ambient temp summary}
