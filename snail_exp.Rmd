@@ -28,7 +28,7 @@ sv_trans <- function(prop, s = 0.000005){
 
 ```{r ggplot themes}
 # set order, labels, and coloring for commonly used species
-coral_labels <- c(expression(italic("Pocillopora")), expression(italic("Porites")))
+coral_labels <- c(expression(italic("P. verrucosa")), expression(italic("P. rus")))
 coral_limits <- c("Pocillopora", "Porites")
 coral_colors <-  c("Pocillopora" = "#0072B2", "Porites" = "#D55E00")
 
@@ -47,13 +47,35 @@ my_theme <-
         legend.key.size = unit(1.5, 'cm'),
         legend.text = element_text(size=25),
         legend.title = element_text(size=32),
-        axis.line = element_line(colour = "black"),
+        axis.line = element_line(colour = "black", size = 1.2),
         plot.title = element_text(color = "black", size = 32, face = "plain"),
-        axis.text.x = element_text(color = "black", size = 30, hjust = .5, vjust = .5, face = "plain"),
-        axis.title.x = element_text(color = "black", size = 32, hjust = .5, vjust = 0, face = "plain"),
-        axis.text.y = element_text(color = "black", size = 30, hjust = .5, vjust = .5, face = "plain"),
-        axis.title.y = element_text(color = "black", size = 32, hjust = .5, vjust = 0, face = "plain"),
+        axis.text.x = element_text(color = "black", size = 30, hjust = .5, vjust = .5, 
+                                   face = "plain"),
+        axis.title.x = element_text(color = "black", size = 32, hjust = .5, vjust = 0, 
+                                    face = "plain"),
+        axis.text.y = element_text(color = "black", size = 30, hjust = .5, vjust = .5, 
+                                   face = "plain"),
+        axis.title.y = element_text(color = "black", size = 32, hjust = .5, vjust = 0, face = "plain",
+                                    margin = margin(r = 15)),
         strip.text.x = element_text(color = "black", size = 32, hjust = .5, vjust = 0, face = "plain")
+  )
+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black", size = 1.2),
+        plot.title = element_text(color = "black", size = 25, hjust = 0, vjust = 0, face = "plain"),
+        axis.text.x = element_text(color = "black", size = 24, hjust = .5, vjust = .5, face = "plain"),
+        axis.title.x = element_text(color = "black", size = 25, hjust = .5, vjust = 0, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 24, hjust = .5, vjust = .5, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 25, hjust = .5, vjust = 0, face = "plain",
+                                    margin = margin(r = 15)),
+        legend.key.size = unit(2.4, "cm"), # increase legend size
+        legend.text = element_text(size = 20), # increase legend text
+        legend.title = element_text(size = 25),
+        legend.position = 'bottom', # move legend to bottom
+        legend.box = 'horizontal',
+        legend.background = element_rect(color = NA)# make legend horizontal
   )
 
 ```
@@ -90,16 +112,16 @@ proportions <- choice_long %>%
 
 # Plot
 (choice_plot <-
-  ggplot(proportions, aes(x = Snail, y = Proportion, fill = Prey)) +
+  ggplot(proportions, aes(x = Snail, y = Proportion*15, fill = Prey)) +
   geom_bar(stat = "identity") +
-  geom_text(aes(x = 0.55, y = 1.15, label = "Fisher's Exact Test\nn = 15\nP < 0.0001"), hjust = 0, size = 14) +
+  geom_text(aes(x = 0.55, y = 17, label = "Fisher's Exact Test\nn = 15\nP < 0.0001"), hjust = 0, size = 14) +
   scale_fill_manual(values = c("NC" = "darkgrey",
                                "Pocillopora" = "#0072B2",
                                "Porites" = "#D55E00"),
                     labels = c("No Choice", coral_labels)) +
-  labs(x = "", y = "Proportion of Choices\n", fill = "Prey") +
+  labs(x = "", y = "Host Occupied", fill = "Prey") +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)),
-                     breaks = seq(0, 1, 0.25)) +  
+                     breaks = seq(0, 15, 3)) +  
   scale_x_discrete(labels = c("Coralliophila" = expression(italic(C.~violacea)), "Drupella" = expression(italic(D.~cornus)))) +
   my_theme)
 
@@ -111,6 +133,18 @@ respo <- read.csv(here::here("data", "snail_respo.csv"))
 
 unfed <- subset(respo, Trial.type == "Unfed")
 fed <- subset(respo, Trial.type == "Fed")
+
+sum(fed$R2 > 0.9)/nrow(fed) # 0.953 respo curves had an R2 > 0.9
+
+# create ggplot histogram of R2
+(fig_s1 <- ggplot(fed, aes(x = R2)) +
+  geom_histogram(binwidth = 0.05, fill = "grey", color = "black") +
+  labs(x = "R2",
+       y = "Frequency\n") +
+  scale_x_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.5,1)) +
+  my_theme)
+
+# ggsave(here::here("output", "respo_r2_hist.png"), fig_s1, height = 10, width = 15)
 
 unfed_mod <- glmmTMB(abs(Respiration) ~ Snail*Temp, data = unfed, family = Gamma(link = "log"))
 summary(unfed_mod)
@@ -134,7 +168,7 @@ emmeans(unfed_mod, pairwise ~ Temp | Snail) # despite no sig interaction, Drupel
 
 
 
-fed_mod <- glmmTMB(abs(Respiration) ~ Temp*Snail + (1|Tank), data = fed, family = Gamma(link = "log"))
+fed_mod <- glmmTMB(abs(Respiration) ~ Temp*Snail + (1|Tank) + (1|Date), data = fed, family = Gamma(link = "log"))
 summary(fed_mod)
 plot(simulateResiduals(fed_mod)) # issues in QQ residuals
 bwplot(abs(Respiration) ~ Temp | Snail, data = fed) # driven by outliers from heated treat. I don't want to delete them
@@ -274,20 +308,21 @@ porites_letters <- data.frame(
 ```{r plot porites growth, fig.height = 10, fig.width=18}
 # Version 1
 (growth_plot <- ggplot() +
-  geom_boxplot(data = porites, aes(x = Snail, y = Net.change, colour = Snail), outlier.shape = NA) +
-  geom_point(data = porites, aes(x = Snail, y = Net.change, colour = Snail), position = position_jitterdodge(0.3)) +
+  geom_boxplot(data = porites, aes(x = Snail, y = Net.change, colour = Snail), outlier.shape = NA, show.legend = F) +
+  geom_point(data = porites, aes(x = Snail, y = Net.change, colour = Snail), position = position_jitterdodge(0.3), show.legend = F) +
   geom_text(data = porites_letters, aes(x = Snail, y = 18, label = Letters), size = 10) +
   facet_wrap(~ Treatment,
              labeller = as_labeller(c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)"))) +
-  scale_colour_manual(values = snail_colors,
-                      labels = c("Control" = expression(atop("Control", "    n = 15")),
-                                 "Coralliophila" = expression(atop(italic("C. violacea"), " n = 15")),
-                                 "Drupella" = expression(atop(italic("D. cornus"), "    n = 15"))
-                                 )
-                      ) +
-  scale_x_discrete(labels = c("Control" = "Control",
-                              "Coralliophila" = expression(italic("C. violacea")),
-                              "Drupella" = expression(italic("D. cornus"))
+   scale_colour_manual(values = snail_colors,
+                       labels = c("Control" = expression(atop("Control", "    n = 15")),
+                                  "Coralliophila" = expression(atop(italic("C. violacea"), " n = 15")),
+                                  "Drupella" = expression(atop(italic("D. cornus"), "    n = 15"))
+                                  )
+                       ) +
+  scale_x_discrete(labels = c(
+    "Control" = expression(atop("Control", "n = 15")),
+    "Coralliophila" = expression(atop(italic("C. violacea"), "n = 15")),
+    "Drupella" = expression(atop(italic("D. cornus"), "n = 15"))
                               )
                    ) +
   labs(y = "Net Growth (% Change)", x = "", title = "a.") +
@@ -436,25 +471,28 @@ survival_stats <- data.frame(
   facet_wrap(~ Treatment,
              labeller = as_labeller(c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)"))) +
   scale_colour_manual(values = snail_colors,
-                      labels = c("Control" = expression(atop("Control", "    n = 12")),
+                      labels = c("Control" = expression(atop("Control", "n = 12")),
                                  "Coralliophila" = expression(atop(italic("C. violacea"), "n = 12")),
-                                 "Drupella" = expression(atop(italic("D. cornus"), "    n = 12"))
+                                 "Drupella" = expression(atop(italic("D. cornus"), "n = 12"))
                                  )
                       ) +
   scale_fill_manual(values = snail_colors,
-                      labels = c("Control" = expression(atop("Control", "    n = 12")),
+                      labels = c("Control" = expression(atop("Control", "n = 12")),
                                  "Coralliophila" = expression(atop(italic("C. violacea"), "n = 12")),
-                                 "Drupella" = expression(atop(italic("D. cornus"), "    n = 12"))
+                                 "Drupella" = expression(atop(italic("D. cornus"), "n = 12"))
                                  )
                       ) +
   labs(
-    x = "Days Until Death",
-    y = "Survival Probability\n",
+    x = "Day of Experiment",
+    y = "Survival Probability",
     title = "b."
     ) +
   geom_text(data = poc_surv_letters, aes(x = X, y = Surv, label = Letters), colour = "black", size = 10) +
   my_theme +
-  theme(legend.position = "right"))
+  theme(legend.position = "bottom",
+        legend.box.margin = margin(t = 10),
+        axis.title.y = element_text(color = "black", size = 32, hjust = .5, vjust = 0, face = "plain",
+                                    margin = margin(r = 28))))
 
 ```
 
@@ -463,7 +501,7 @@ survival_stats <- data.frame(
 
 # I ANNOTATED THIS FURTHER IN PHOTOSHOP TO ADD RELEVANT STATISTICAL INFO TO BOTH PLOTS
 
-# ggsave(here::here("output", "growth_survival_plot_v4.png"), growth_surv_panel, height = 18, width = 20)
+# ggsave(here::here("output", "growth_survival_plot_v6.png"), growth_surv_panel, height = 18, width = 20)
 
 ```
 
@@ -668,6 +706,11 @@ poc_front_back <- poc_key_images %>%
   group_by(Coral.ID) %>%
   summarise(Planar.area = sum(Area))
 
+# full area
+poc_area <- poc_wax_images %>%
+  group_by(Coral.ID) %>%
+  summarise(Planar.area = sum(Area))
+
 # read wax dip area
 poc_wax_weights <- read.csv(here::here("data", "poc_wax_dipping.csv"))
 
@@ -679,12 +722,30 @@ poc_wax_weights_subset <- poc_wax_weights[poc_wax_weights$Coral.ID %in% unique(p
 
 poc_wax_area <- merge(poc_front_back, poc_wax_weights_subset, by = "Coral.ID")
 
-# fit relationship of planar area to surface area to extract relationship
-area_mod <- lm(Surface.area ~ Planar.area, poc_wax_area)
-summary(area_mod) # intercept = 2.2198, slope = 0.9060
-performance::r2(area_mod) # R2 = 0.608 - not great but good
-plot(poc_wax_area$Planar.area, poc_wax_area$Surface.area, xlab = "Planar area", ylab = "Wax dipped surface area")
+poc_wax_area_full <- merge(poc_area, poc_wax_weights_subset, by = "Coral.ID")
 
+# fit relationship of planar area to surface area to extract relationship
+area_mod <- lm(Surface.area ~ Planar.area, poc_wax_area_full)
+summary(area_mod) # intercept = -0.94402 , slope = 0.69687
+performance::r2(area_mod) # R2 = 0.607 - not great but good
+plot(poc_wax_area_full$Planar.area, poc_wax_area_full$Surface.area, xlab = "Planar area", ylab = "Wax dipped surface area")
+
+
+
+```
+
+```{r surface area conversion plot, fig.height = 10, fig.width=12}
+(poc_biomass_conversion_plot <-
+  ggplot(data = poc_wax_area_full) +
+  geom_point(aes(x = Planar.area, y = Surface.area)) +
+  geom_smooth(aes(x = Planar.area, y = Surface.area), method = lm, se = TRUE) +
+  geom_text(aes(x = 63, y = 10, label = "y = 0.69687x - 0.99402\nR2 = 0.607"), hjust = 1, size = 8) +
+  labs(x = expression(Planar ~ Area ~ (cm^2)),
+       y = expression(Wax ~ Dipped ~ Surface ~ Area ~ (cm^2))) +
+   my_theme
+ )
+
+# ggsave(here::here("output", "surface_area_conversion_v1.png"), poc_biomass_conversion_plot, height = 10, width = 12)
 ```
 
 ```{r pocillopora biomass}
@@ -696,13 +757,17 @@ poc_surv_front_back <- subset(poc_tissue_long, Image.number == 1 | Image.number 
   group_by(Coral.ID) %>%
   summarise(Planar.area = sum(Live.tissue))
 
+poc_surv_full <- poc_tissue_long %>%
+  group_by(Coral.ID) %>%
+  summarise(Planar.area = sum(Live.tissue))
+
 # merge with proportional mortality data
-poc_surv_tissue <- merge(poc_surv_front_back,
-                         pocillopora_tissue[pocillopora_tissue$Coral.ID %in% unique(poc_surv_front_back$Coral.ID),],
+poc_surv_tissue <- merge(poc_surv_full,
+                         pocillopora_tissue[pocillopora_tissue$Coral.ID %in% unique(poc_surv_full$Coral.ID),],
                          by = "Coral.ID")
 
 # calculate surface area based on relationship between planar area and surface area from wax-dipped corals
-poc_surv_tissue$Surface.area <- 2.2198 + 0.9060*poc_surv_tissue$Planar.area
+poc_surv_tissue$Surface.area <- -0.94402 + 0.69687*poc_surv_tissue$Planar.area
 
 # correct for proportional mortality - only include surviving tissue
 poc_surv_tissue$Surface.area.corrected <- poc_surv_tissue$Surface.area*(1-poc_surv_tissue$Mortality)
@@ -730,13 +795,13 @@ hist(poc_biomass_full$Biomass)
 
 ```{r poc model}
 # simplest
-wilcox.test(Biomass ~ Treatment, poc_biomass_full) # P = 0.78
+wilcox.test(Biomass ~ Treatment, poc_biomass_full) # P = 0.71
 
 # mixed model
-poc_bio_mod <- glmmTMB(Biomass ~ Treatment + (1|Colony.ID) + (1|Tank), family = Gamma("log"), data = poc_biomass_full[poc_biomass_full$Biomass < 0.03,])
+poc_bio_mod <- glmmTMB(Biomass ~ Treatment*Snail + (1|Colony.ID) + (1|Tank), family = Gamma("log"), data = poc_biomass_full)
 plot(simulateResiduals(poc_bio_mod)) # outliers detected (as expected) but otherwise fine
 summary(poc_bio_mod) # lots of variance in random effects - enhanced by uneven sample size
-Anova(poc_bio_mod) # X2 = 0.55, P = 0.46
+Anova(poc_bio_mod) # X2 = 0.75, P = 0.39
 ```
 
 
@@ -794,7 +859,7 @@ Anova(por_bio_mod2) # X2 = 9.0, P = 0.002
              aes(x = Treatment, y = Biomass, colour = Treatment), position = position_jitterdodge(0.3)) +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
-  labs(y = expression(Biomass ~ (g ~ cm^-2)),
+  labs(y = expression(Tissue ~ biomass ~ (g ~ cm^-2)),
        x = "", title = "a.") +
   scale_x_discrete(labels = c("Heated" = "Heated (30.5°C)\nn = 40", "Ambient" = "Ambient (28.5°C)\nn = 45")) +
   geom_text(aes(x = 0.5, y = 0.0115, label = "GLMM\nX2 = 9.0, P = 0.002"), hjust = 0, size = 10) + 
@@ -809,9 +874,9 @@ Anova(por_bio_mod2) # X2 = 9.0, P = 0.002
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
   scale_x_discrete(labels = c("Heated" = "Heated (30.5°C)\nn = 9", "Ambient" = "Ambient (28.5°C)\nn = 18")) +
-  labs(y = expression(Biomass ~ (g ~ cm^-2)),
+  labs(y = expression(Tissue ~ biomass ~ (g ~ cm^-2)),
        x = "", title = "b.") +
-  geom_text(aes(x = 0.5, y = 0.03, label = "Wilxocon Rank Sum Test\nW = 75, P = 0.78"), hjust = 0, size = 10) + 
+  geom_text(aes(x = 0.5, y = 0.025, label = "Wilxocon Rank Sum Test\nW = 73, P = 0.71"), hjust = 0, size = 10) + 
   my_theme)
 ```
 
@@ -914,9 +979,9 @@ pocillopora_feeding_emmeans$upper.CI <- inv_logit(pocillopora_feeding_emmeans$as
   scale_x_discrete(labels = c("Coralliophila" = expression(italic(C.~violacea)), "Drupella" = expression(italic(D.~cornus)))) +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
-  labs(y = "Feeding Probability\n", title = "a.", x = "") + 
+  labs(y = "Feeding Probability", title = "a.", x = "") + 
   geom_segment(aes(x = 1.8, xend = 2.2, y = 0.95, yend = 0.95)) +
-  geom_text(aes(x = 2, y = 1, label = "***"), size = 8) +
+  geom_text(aes(x = 2, y = 1, label = "***"), size = 10) +
   geom_text(aes(x = 0.5, y = 0.25, label = "Temp: P 0.07\nSnail:P < 0.001\nInteraction: P < 0.001"), size = 10, hjust = 0) +
   my_theme)
   
@@ -929,7 +994,7 @@ pocillopora_feeding_emmeans$upper.CI <- inv_logit(pocillopora_feeding_emmeans$as
   scale_x_discrete(labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5°C)", "Ambient" = "Ambient (28.5°C)")) +
-  labs(y = "Feeding Probability\n", title = "b.", x = "") + 
+  labs(y = "Feeding Probability", title = "b.", x = "") + 
   geom_text(aes(x = 0.5, y = 0.7, label = "GLMM\nX2 = 3.5, P = 0.06"), size = 10, hjust = 0) +
   my_theme)
 ```
