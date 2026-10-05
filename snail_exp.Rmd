@@ -228,14 +228,17 @@ emmeans(fed_mod, pairwise ~ Snail | Temp) # Drup resp always higher than Coralli
   scale_y_continuous(trans = "log10") +
   scale_colour_manual(values = c("Heated" = "#FE6100", "Ambient" = "#648FFF"),
                       labels = c("Heated" = "Heated (30.5 °C)", "Ambient" = "Ambient (28.5 °C)")) +
-  scale_x_discrete(labels = c("Coralliophila" = expression(atop(italic("C. violacea"), "n = 53")),
-                              "Drupella" = expression(atop(italic("D. cornus"), "n = 54"))
+  scale_x_discrete(labels = c("Coralliophila" = expression(atop(italic("C. violacea"), "n = 53"
+                                                                )),
+                              "Drupella" = expression(atop(italic("D. cornus"), "n = 54"
+                                                           ))
                               )
                    ) +
-  labs(y = expression(Respiration ~ (mu * mol ~ O[2] ~ g ~ h^-1)), x = "") +
+   
+  labs(y = expression(Respiration ~ (mu * mol ~ O[2] ~ g ~ h^-1)), x = "", title = "a.") +
   geom_segment(aes(x = 1.8, xend = 2.2, y = 3.5, yend = 3.5)) +
   geom_text(aes(x = 2, y = 3.7, label = "*"), size = 14) +
-  geom_text(aes(x = 0.5, y = 3, label = "Temp: P = 0.022\nSnail: P < 0.0001\nInteraction: P = 0.22"), hjust = 0, size = 10) + 
+#  geom_text(aes(x = 0.5, y = 3, label = "Temp: P = 0.022\nSnail: P < 0.0001\nInteraction: P = 0.22"), hjust = 0, size = 10) + 
   my_theme)
 
 # ggsave(here::here("output", "fig_4.png"), respo_plot, height = 10, width = 12, units = "in", dpi = "retina")
@@ -1029,6 +1032,7 @@ pocillopora_feeding_emmeans$upper.CI <- inv_logit(pocillopora_feeding_emmeans$as
 #   bg = "transparent"
 # )
 ```
+
 
 ```{r ambient temp summary}
 # read temp summary table from edi
